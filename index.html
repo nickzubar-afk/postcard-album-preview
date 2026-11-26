@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha384-7wAp0WUCEOnIS8YNhZI90wxYjCQviAv0Ga4/TdOHB8UZ//dlBG2fg0sbIzutqXKD'; style-src 'self'; img-src data:; media-src blob:; connect-src 'self'; frame-src 'self'; worker-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>За кадром · Живой альбом</title>
+  <script src="album.js" integrity="sha384-7wAp0WUCEOnIS8YNhZI90wxYjCQviAv0Ga4/TdOHB8UZ//dlBG2fg0sbIzutqXKD"></script>
+</head>
+<body>
+  <main class="cover" id="main">
+    <header class="mast"><span class="brand"><i class="book-mark" aria-hidden="true"></i>Живой альбом</span><button id="lock" class="text-btn" hidden>Закрыть доступ</button></header>
+    <section class="spread">
+      <div class="book" aria-hidden="true"><div class="book-spine"></div><div class="book-inset"><div class="motion-mark"><i></i><i></i><i></i></div><div class="book-title">За<br><em>кадром</em></div></div></div>
+      <div class="intro">
+        <h1 id="title">Альбом закрыт</h1>
+        <p id="intro-text" role="status">Чтобы открыть воспоминание, отсканируй QR-код на фотографии или открой личную ссылку.</p>
+        <div id="actions" hidden><button id="camera" class="primary">Открыть камеру</button><button id="manual" class="secondary">Посмотреть без камеры</button></div>
+        <p id="camera-hint" class="hint" hidden></p>
+      </div>
+    </section>
+    <section id="player" class="player" hidden aria-labelledby="player-title">
+      <header class="player-head"><h2 id="player-title">Просмотр без камеры</h2><button class="text-btn" id="close-player">Свернуть</button></header>
+      <label id="page-choice" hidden>Фотография <select id="pages"></select></label>
+      <h3 id="page-title"></h3>
+      <p id="player-status" role="status"></p>
+      <div id="media" hidden>
+        <video id="film" controls muted playsinline preload="metadata" aria-label="Ролик фотографии"></video>
+        <button class="secondary" id="film-sound" hidden>Включить звук</button>
+        <div id="audio-only" hidden>
+          <label for="voice" class="voice-label">Только звук ролика</label>
+          <audio id="voice" controls preload="metadata"></audio>
+        </div>
+      </div>
+    </section>
+    <noscript>Для просмотра альбома включи JavaScript в браузере.</noscript>
+  </main>
+  <section class="overlay" id="scanner" hidden aria-label="Распознавание фотографии">
+    <div id="frame"></div>
+    <div class="scan-top"><button id="exit-camera">Закрыть камеру</button><button id="scan-voice" hidden>Включить звук</button></div>
+    <div class="scan-bottom"><p id="scan-status" role="status"></p><button class="scan-fallback" id="scan-fallback">Посмотреть без камеры</button></div>
+  </section>
+</body>
+</html>
