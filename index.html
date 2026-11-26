@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha384-7wAp0WUCEOnIS8YNhZI90wxYjCQviAv0Ga4/TdOHB8UZ//dlBG2fg0sbIzutqXKD'; style-src 'self'; img-src data:; media-src blob:; connect-src 'self'; frame-src 'self'; worker-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha384-WS4HjyavU2PY8lqsTAoaf/OvSMf8K3Dk+i1CbVHr67dWswElHJ7HD9KjGqX0uwMF' 'sha384-Spz0EPRBR7ej4GggAC9maYu9e4Cj196vk8XYJNg0oIBdi16+1L/rYPABeQij6fDA'; style-src 'self'; img-src data:; media-src blob:; connect-src 'self'; frame-src 'self'; worker-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <meta charset="utf-8">
   <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>За кадром · Живой альбом</title>
-  <script src="album.js" integrity="sha384-7wAp0WUCEOnIS8YNhZI90wxYjCQviAv0Ga4/TdOHB8UZ//dlBG2fg0sbIzutqXKD"></script>
+  <script src="album-fast.js" integrity="sha384-WS4HjyavU2PY8lqsTAoaf/OvSMf8K3Dk+i1CbVHr67dWswElHJ7HD9KjGqX0uwMF"></script>
+  <script defer src="stream-player.js" integrity="sha384-Spz0EPRBR7ej4GggAC9maYu9e4Cj196vk8XYJNg0oIBdi16+1L/rYPABeQij6fDA"></script>
 </head>
 <body>
   <main class="cover" id="main">
@@ -26,11 +27,11 @@
       <h3 id="page-title"></h3>
       <p id="player-status" role="status"></p>
       <div id="media" hidden>
-        <video id="film" controls muted playsinline preload="metadata" aria-label="Ролик фотографии"></video>
+        <video id="film" controls muted playsinline preload="auto" aria-label="Ролик фотографии"></video>
         <button class="secondary" id="film-sound" hidden>Включить звук</button>
         <div id="audio-only" hidden>
-          <label for="voice" class="voice-label">Только звук ролика</label>
-          <audio id="voice" controls preload="metadata"></audio>
+          <button type="button" id="load-voice" class="text-btn">Послушать только звук</button>
+          <audio id="voice" controls hidden preload="none" aria-label="Только звук ролика"></audio>
         </div>
       </div>
     </section>
