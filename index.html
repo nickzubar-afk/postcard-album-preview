@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha384-WS4HjyavU2PY8lqsTAoaf/OvSMf8K3Dk+i1CbVHr67dWswElHJ7HD9KjGqX0uwMF' 'sha384-Spz0EPRBR7ej4GggAC9maYu9e4Cj196vk8XYJNg0oIBdi16+1L/rYPABeQij6fDA'; style-src 'self'; img-src data:; media-src blob:; connect-src 'self'; frame-src 'self'; worker-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha384-aY4x7ioAaTznonxiZZPYhoo1tFaJ9OilItH/SZQAC4zY8CUeI/WwfB9aD+8oSES8' 'sha384-7Y7/o57b6QUoQgUjtWdsENLOJvB04gaQDwj1MkElxLaACCdKGFAilELByv6xAjic'; style-src 'self'; img-src data:; media-src blob:; connect-src 'self'; frame-src 'self'; worker-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <meta charset="utf-8">
   <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>За кадром · Живой альбом</title>
-  <script src="album-fast.js" integrity="sha384-WS4HjyavU2PY8lqsTAoaf/OvSMf8K3Dk+i1CbVHr67dWswElHJ7HD9KjGqX0uwMF"></script>
-  <script defer src="stream-player.js" integrity="sha384-Spz0EPRBR7ej4GggAC9maYu9e4Cj196vk8XYJNg0oIBdi16+1L/rYPABeQij6fDA"></script>
+  <script src="album-camera-v2.js" integrity="sha384-aY4x7ioAaTznonxiZZPYhoo1tFaJ9OilItH/SZQAC4zY8CUeI/WwfB9aD+8oSES8"></script>
+  <script defer src="stream-smooth.js" integrity="sha384-7Y7/o57b6QUoQgUjtWdsENLOJvB04gaQDwj1MkElxLaACCdKGFAilELByv6xAjic"></script>
 </head>
 <body>
   <main class="cover" id="main">
@@ -17,22 +17,8 @@
       <div class="intro">
         <h1 id="title">Альбом закрыт</h1>
         <p id="intro-text" role="status">Чтобы открыть воспоминание, отсканируй QR-код на фотографии или открой личную ссылку.</p>
-        <div id="actions" hidden><button id="camera" class="primary">Открыть камеру</button><button id="manual" class="secondary">Посмотреть без камеры</button></div>
+        <div id="actions" hidden><button id="camera" class="primary">Открыть камеру</button></div>
         <p id="camera-hint" class="hint" hidden></p>
-      </div>
-    </section>
-    <section id="player" class="player" hidden aria-labelledby="player-title">
-      <header class="player-head"><h2 id="player-title">Просмотр без камеры</h2><button class="text-btn" id="close-player">Свернуть</button></header>
-      <label id="page-choice" hidden>Фотография <select id="pages"></select></label>
-      <h3 id="page-title"></h3>
-      <p id="player-status" role="status"></p>
-      <div id="media" hidden>
-        <video id="film" controls muted playsinline preload="auto" aria-label="Ролик фотографии"></video>
-        <button class="secondary" id="film-sound" hidden>Включить звук</button>
-        <div id="audio-only" hidden>
-          <button type="button" id="load-voice" class="text-btn">Послушать только звук</button>
-          <audio id="voice" controls hidden preload="none" aria-label="Только звук ролика"></audio>
-        </div>
       </div>
     </section>
     <noscript>Для просмотра альбома включи JavaScript в браузере.</noscript>
@@ -40,7 +26,7 @@
   <section class="overlay" id="scanner" hidden aria-label="Распознавание фотографии">
     <div id="frame"></div>
     <div class="scan-top"><button id="exit-camera">Закрыть камеру</button><button id="scan-voice" hidden>Включить звук</button></div>
-    <div class="scan-bottom"><p id="scan-status" role="status"></p><button class="scan-fallback" id="scan-fallback">Посмотреть без камеры</button></div>
+    <div class="scan-bottom"><p id="scan-status" role="status"></p><button class="scan-fallback" id="scan-play" hidden>Запустить ролик</button><button class="scan-fallback" id="scan-retry" hidden>Попробовать ещё раз</button></div>
   </section>
 </body>
 </html>
