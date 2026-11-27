@@ -5,7 +5,7 @@
   const ctx=canvas.getContext("2d",{alpha:false,willReadFrequently:true});
   let callbacks, stream, worker, workerUrl, timer, running=false, busy=false, stopped=false;
   let trackFrame, visible=-1, loaded=-1, requested=-1, lastSeen=0, lastCorners, lastSize;
-  let candidate=-1, candidateCount=0;
+  let candidate=-1, candidateCount=0, openingTimer=0;
   const planeSize=160;
   // Solve the rectangle-to-quadrilateral homography and pass it to the native
   // video layer. No decoding, texture upload, or per-video-frame JS rendering.
@@ -110,23 +110,41 @@
     }
   }
   function clearClip(){
+    clearTimeout(openingTimer);openingTimer=0;
     requested=loaded=-1; clip.classList.remove("shown");clip.muted=true;clip.pause();
     if(clip.hasAttribute("src")){clip.removeAttribute("src");clip.load();}
   }
   function prepareClip(index){clearClip();if(stopped)throw Error("Camera stopped");loaded=index;return clip;}
+  function playRequested(index){
+    if(stopped||loaded!==index||visible!==index||requested!==index)return;
+    clip.play().catch(e=>{if(e.name!=="AbortError" && !stopped && requested===index)callbacks.playError();});
+  }
   function showReady(){
-    // While a seek is pending the last frame of the old position can remain
-    // on the compositor, even though readyState is already HAVE_CURRENT_DATA.
+    // Seeking can leave the previous frame on the native compositor.
     if(stopped||loaded<0||loaded!==requested||visible!==loaded||clip.readyState<2||clip.seeking)return;
+    if(clip.classList.contains("shown")){
+      if(!openingTimer && clip.paused)playRequested(loaded);
+      return;
+    }
+    // Safari can require play() to decode its first frame. Stop the clock before
+    // revealing that frame, including when a busy main thread handled it late.
+    clip.pause();
+    if(clip.currentTime>.02){clip.currentTime=0;return;}
     clip.classList.add("shown");
+    const index=loaded;
+    openingTimer=setTimeout(()=>{
+      openingTimer=0;playRequested(index);
+    },matchMedia("(prefers-reduced-motion:reduce)").matches?16:120);
   }
   function showClip(index){
     if(stopped||index!==loaded||index!==visible)return;
-    requested=index; showReady();
-    clip.play().catch(e=>{if(e.name!=="AbortError" && !stopped && requested===index)callbacks.playError();});
+    requested=index;
+    if(clip.readyState<2){playRequested(index);return;}
+    showReady();
   }
   function hideClip(index){
     if(requested!==index)return;
+    clearTimeout(openingTimer);openingTimer=0;
     requested=-1;clip.classList.remove("shown");clip.muted=true;clip.pause();
     // This is only called for a confirmed loss, after the tracking grace period.
     // Reacquiring the same printed photo should animate its opening frame again.
@@ -135,7 +153,7 @@
   function setSound(index,enabled){
     if(index!==visible||index!==loaded||requested!==index)return false;
     clip.muted=!enabled;
-    if(enabled)clip.play().catch(()=>{if(!stopped&&requested===index)callbacks.playError();});
+    if(enabled && !openingTimer)clip.play().catch(()=>{if(!stopped&&requested===index)callbacks.playError();});
     return !clip.muted;
   }
   function stop(){
